@@ -12,3 +12,4 @@ tavily-python
 fastapi
 uvicorn
 python-multipart
+unstructured

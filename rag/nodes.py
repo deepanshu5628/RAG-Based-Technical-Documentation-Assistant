@@ -90,12 +90,20 @@ def generate_node(state: App_State):
     user_question = state["user_question"]
     context = state["refined_context"]
 
+    # pull sources from the good chunks
+    sources = []
+    for chunk in state["good_chunks"]:
+        sources.append({
+            "source": chunk.metadata.get("source", "unknown"),
+            "page": chunk.metadata.get("page", "unknown"),
+        })
+
     sys_msg = SystemMessage(content="You are a helpful assistant. only answer the quesion from the given context. if you don't find the answer there. just say i don't know")
     human_msg = HumanMessage(content=f"Answer this user question->{user_question} \n\n based on the context:\n\n{context}")
     final_model = model.with_structured_output(GeneratedResponce)
     model_res = final_model.invoke([sys_msg, human_msg])
     iter_count = state.get("curr_iter", 0) + 1
-    return {"answer": model_res.answer, "answergiven": model_res.answergiven, "curr_iter": iter_count}
+    return {"answer": model_res.answer, "answergiven": model_res.answergiven, "curr_iter": iter_count, "sources": sources}
 
 
 def rewrite_qwery_node(state: App_State):

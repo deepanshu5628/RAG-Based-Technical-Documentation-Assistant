@@ -23,6 +23,7 @@ class App_State(TypedDict):
     # final answer
     answer: str
     answergiven: bool
+    sources: List[dict]
 
     # retry count
     curr_iter: int
