@@ -8,3 +8,7 @@ pypdf
 faiss-cpu
 pydantic
 tavily-python
+
+fastapi
+uvicorn
+python-multipart
