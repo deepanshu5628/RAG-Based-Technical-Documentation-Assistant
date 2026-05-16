@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from rag.graph import workflow
+
 app = FastAPI(title="CRAG RAG API")
 
 DOCUMENTS_FOLDER = "./Documents"
@@ -37,7 +39,7 @@ def upload_pdf(file: UploadFile = File(...)):
     if not file.filename.endswith(".pdf"):
         raise HTTPException(status_code=400, detail=error_response("Only PDF files are allowed"))
 
-    if file.size and file.size > 10 * 1024 * 1024:  # 10MB limit
+    if file.size and file.size > 10 * 1024 * 1024:
         raise HTTPException(status_code=413, detail=error_response("File size exceeds 10MB limit"))
 
     try:
@@ -75,7 +77,15 @@ def list_documents():
 @app.post("/ask")
 def ask(req: AskRequest):
     try:
-        # workflow will be wired here later
-        return success_response("Answer generated", {"question": req.question, "answer": "not implemented yet"})
+        result = workflow.invoke({
+            "user_question": req.question,
+            "curr_iter": 0,
+            "max_iter": req.max_iter,
+        })
+        return success_response("Answer generated", {
+            "question": req.question,
+            "answer": result["answer"],
+            "answergiven": result["answergiven"],
+        })
     except Exception as e:
         raise HTTPException(status_code=500, detail=error_response(f"Something went wrong: {str(e)}"))
