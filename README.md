@@ -6,7 +6,7 @@ this is a Corrective RAG (CRAG) system built using LangGraph and FastAPI. the id
 
 ## How it works (Architecture)
 
-![Architecture Diagram](assets/graph.png)
+![Architecture Diagram](Assets/graph.png)
 
 the flow goes like this:
 
