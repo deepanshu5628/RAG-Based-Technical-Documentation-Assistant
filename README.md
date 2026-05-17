@@ -6,6 +6,8 @@ this is a Corrective RAG (CRAG) system built using LangGraph and FastAPI. the id
 
 ## How it works (Architecture)
 
+![Architecture Diagram](assets/graph.png)
+
 the flow goes like this:
 
 ```
@@ -19,7 +21,9 @@ Retrieval Evaluator  <- scores each chunk 0-10, decides: correct / incorrect / a
      |
      |-- correct   --> Knowledge Refinement
      |-- incorrect --> Rewrite Query --> Web Search --> Knowledge Refinement
-     |-- ambiguous --> Rewrite Query --> Web Search --> Knowledge Refinement
+     |-- ambiguous --> Rewrite Query --> Web Search --+
+                   |                                  |--> Knowledge Refinement
+                   +-- (good chunks kept) ------------+
                                                             |
                                                             v
                                                         Generate   <- answers from refined context
